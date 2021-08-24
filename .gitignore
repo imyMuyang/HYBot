@@ -1,0 +1,9 @@
+session.token
+device.json
+data
+logs
+rubbish
+config
+config*
+node_modules/
+go-cqhttp*

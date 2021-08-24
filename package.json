@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "axios": "latest",
+    "chalk": "latest",
+    "dayjs": "latest",
+    "express": "latest",
+    "body-parser": "latest",
+    "js-yaml": "latest"
+  }
+}
