@@ -7,3 +7,4 @@ config
 config*
 node_modules/
 go-cqhttp*
+plugin/
