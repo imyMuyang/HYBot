@@ -1,6 +1,6 @@
 //#region 代码依赖
 const API = require('./API/imyMuyang@API');
-const correct = require('./API/imyMuyang@Correct');
+const receiverGocq = require('./receiver/go-cq');
 const fs = require('fs');
 const express = require('express');
 const jsyaml = require('js-yaml');
@@ -38,19 +38,23 @@ function server() {
   API.warn('HYBot 的任何协议都在本地的端口上启用，如果想进行跨设备操作，请自行开放内网服务。');
   if (jsyaml.load(fs.readFileSync('./config/bot.yml')).QQ.enable == 'enable') {
     onebot.post('/', bodyParser.json(), (req, res) => {
-      const messageData = correct.check(req.body); // 引入correct校正模块
-      if (messageData.message_type == 'private') {
-        // 私聊消息
-        API.info('[QQ] ' + messageData.sender.nickname + '(' + messageData.user_id + ') 私聊 Bot => ' + messageData.raw_message);
-        emitType = 'OneBot > privateMsg';
-      } else if (messageData.message_type == 'group') {
-        // 群聊消息
-        API.info('[QQ] ' + messageData.group_id + ' | ' + messageData.user_id + ' 群聊 Bot => ' + messageData.raw_message);
-        emitType = 'OneBot > groupMsg';
-      } else {
-        console.log(messageData);
-        emitType = 'OneBot > unknown';
-      }
+      // const messageData = correct.check(req.body); // 引入correct校正模块
+      // if (messageData.message_type == 'private') {
+      //   // 私聊消息
+      //   API.info('[QQ] ' + messageData.sender.nickname + '(' + messageData.user_id + ') 私聊 Bot => ' + messageData.raw_message);
+      //   emitType = 'OneBot > privateMsg';
+      // } else if (messageData.message_type == 'group') {
+      //   // 群聊消息
+      //   API.info('[QQ] ' + messageData.group_id + ' | ' + messageData.user_id + ' 群聊 Bot => ' + messageData.raw_message);
+      //   emitType = 'OneBot > groupMsg';
+      // } else {
+      //   console.log(messageData);
+      //   emitType = 'OneBot > unknown';
+      // }
+      emitType = receiverGocq.receive(req.body)[0];
+      messageData = receiverGocq.receive(req.body)[1];
+      API.info(receiverGocq.receive(req.body)[2]);
+      console.log(messageData);
       for (let i = 0; i < fs.readdirSync('./plugin').length; i++) {
         delete require.cache[require.resolve('./plugin/' + fs.readdirSync('./plugin')[i])];
         plugin = require('./plugin/' + fs.readdirSync('./plugin')[i]);

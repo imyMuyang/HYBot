@@ -23,8 +23,9 @@ function getInfo() {
   return appInfo;
 }
 
-Bot.on('OneBot > privateMsg', event => {
+Bot.on('OneBot > chat-private', event => {
   //使用Bot.on(type, event =>)来注册一个监听器，获取消息
+  console.log(event);
   if (event.message == '你好') {
     QQ.sendPrivateMsg(event.user_id, '你好呀~');
   }
